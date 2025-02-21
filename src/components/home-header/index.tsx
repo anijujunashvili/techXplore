@@ -25,7 +25,7 @@ const HomeHeader = () => {
             <div>
               <Avatar>
                 <AvatarImage
-                  src="https://github.com/shadcn.png"
+                  src="https://media.gq-magazine.co.uk/photos/5ed927b6a34700a286426181/1:1/w_1410,h_1410,c_limit/GettyImages-82741669.jpg"
                   alt="@shadcn"
                 />
                 <AvatarFallback>CN</AvatarFallback>
