@@ -1,0 +1,157 @@
+import { Bills, Request } from "@/types/participation";
+import { useForm, Controller } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useNavigate } from "react-router-dom";
+
+const Loans = ({
+  headline,
+  bills,
+}: {
+  headline: string;
+  bills: Bills[] | undefined;
+}) => {
+  const defaultValues = { bills: 0, personal_number: 0 };
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Request>({
+    defaultValues: defaultValues,
+  });
+  const navigate = useNavigate();
+
+  const onSubmit = () => {
+    console.log(control._formValues);
+    navigate("/");
+  };
+  return (
+    <>
+      <Card className="w-full rounded-2xl px-4">
+        <CardHeader className=" border-b">
+          <CardTitle>{headline}</CardTitle>
+        </CardHeader>
+        <CardContent className="px-0">
+          <div className="flex flex-col">
+            <div className="grid grid-cols-5 border-b gap-6 py-2 px-6  text-black text-sm cursor-pointer font-primaryMedium">
+              <div>დასახელება</div>
+              <div>აბონენტის ნომერი</div>
+              <div>თანხა</div>
+              <div>მისამართი</div>
+              <div>გადასახადის თარიღი</div>
+            </div>
+          </div>
+          {bills?.map((b) => (
+            <div
+              key={b.account_number}
+              className="grid grid-cols-5 border-b gap-6 py-4 px-6 hover:bg-gray-50 transition-all text-gray-600 cursor-pointer font-primaryMedium"
+            >
+              <div className="text-gray-900">{b.title}</div>
+              <div>{b.account_number}</div>
+              <div>{b.amount} ₾</div>
+              <div>{b.address}</div>
+              <div>{b.date}</div>
+            </div>
+          ))}
+        </CardContent>
+        <CardFooter className="flex justify-end px-0">
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button className="font-primaryMedium ">
+                {" "}
+                მოთხოვნის გაგზავნა
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <DialogHeader>
+                  <DialogTitle className="text-sm font-primaryRegular">
+                    კომუნალურზე თანამონაწილეობის მოთხოვნა
+                  </DialogTitle>
+                  <DialogDescription></DialogDescription>
+                </DialogHeader>
+                <div className="flex flex-col gap-4 py-4">
+                  <div>
+                    <Controller
+                      render={() => (
+                        <Select>
+                          <SelectTrigger>
+                            <SelectValue placeholder="აირჩიეთ კომუნალური" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="1">თელასი</SelectItem>
+                            <SelectItem value="2">GWP</SelectItem>
+                            <SelectItem value="3">ენერგო პრო</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      )}
+                      control={control}
+                      name="bills"
+                    />
+                    {errors.bills && (
+                      <span className="text-destructive text-xs">
+                        აირჩიეთ კომუნალური
+                      </span>
+                    )}
+                  </div>
+                  <div className=" items-center gap-4">
+                    <Controller
+                      control={control}
+                      name="personal_number"
+                      rules={{ required: true, minLength: 11, maxLength: 11 }}
+                      render={({ field: { onChange, value } }) => (
+                        <Input
+                          onChange={onChange}
+                          minLength={11}
+                          maxLength={11}
+                          value={value}
+                          placeholder="მომხმარებლის პირადი ნომერი"
+                          autoComplete="off"
+                        />
+                      )}
+                    />
+                    {errors.personal_number && (
+                      <span className="text-destructive text-xs">
+                        პირადი ნომერი უნდა შედგებოდეს 11 ციფრისგან
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button type="submit">გაგზავნა</Button>
+                </DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
+        </CardFooter>
+      </Card>
+    </>
+  );
+};
+
+export default Loans;
