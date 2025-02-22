@@ -1,18 +1,28 @@
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LogOut, MessageSquare, Mail, Settings } from "lucide-react";
 import HomeNavbar from "./navbar";
 import { useTranslation } from "react-i18next";
+import { meAtom } from "@/store/auth";
+import { useAtomValue } from "jotai";
 
 const HomeHeader = () => {
   const location = useLocation();
   const { t } = useTranslation();
+  const userInfo = useAtomValue(meAtom);
+  const navigate = useNavigate();
 
   const menuDesc = location.pathname.includes("requests")
     ? t("main.requests")
     : t("main.participation");
   const { lang } = useParams();
   const logoImg = lang === "ka" ? "Logo-ka.svg" : "Logo-en.svg";
+
+  const hanleLogOut = () => {
+    localStorage.removeItem("authUser");
+    navigate(`/${lang}/login`);
+  };
+
   return (
     <header className="flex flex-col">
       <div className="bg-primary flex  items-center">
@@ -21,7 +31,7 @@ const HomeHeader = () => {
             <img src={`../${logoImg}`} className="h-[36px]" />
           </div>
           <div className="flex flex-row items-center gap-4 text-white">
-            <div>GIORGI CIRAMUA</div>
+            <div>{userInfo?.first_name + " " + userInfo?.last_name}</div>
             <div>
               <Avatar>
                 <AvatarImage
@@ -32,7 +42,7 @@ const HomeHeader = () => {
               </Avatar>
             </div>
             <div>
-              <LogOut />
+              <LogOut onClick={hanleLogOut} />
             </div>
           </div>
         </div>

@@ -7,19 +7,35 @@ import { loginType } from "@/types/login";
 import { SignInSchema } from "../schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslation } from "react-i18next";
+import { useLogin } from "@/react-query/mutation/user";
+import { useNavigate, useParams } from "react-router-dom";
+import { userAtom } from "@/store/auth";
+import { setAuthToken } from "@/api";
+import { useSetAtom } from "jotai";
 
 const LoginForm = () => {
+  const setuser = useSetAtom(userAtom);
   const { t } = useTranslation();
+  const { lang } = useParams();
+  const navigate = useNavigate();
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm<loginType>({
-    defaultValues: { email: "", password: "" },
+    defaultValues: { username: "", password: "" },
     resolver: zodResolver(SignInSchema),
   });
+  const { mutate } = useLogin();
   const onSubmit = (fieldValues: loginType) => {
-    console.log(fieldValues);
+    mutate(fieldValues, {
+      onSuccess: (data) => {
+        setAuthToken(data?.access);
+        localStorage.setItem("authUser", JSON.stringify(data));
+        setuser(data);
+        navigate(`/${lang}/participation`);
+      },
+    });
   };
 
   return (
@@ -37,7 +53,7 @@ const LoginForm = () => {
                 <div className="flex flex-col w-full  gap-6">
                   <div>
                     <Controller
-                      name="email"
+                      name="username"
                       control={control}
                       render={({ field: { onChange, value } }) => {
                         return (
@@ -51,7 +67,7 @@ const LoginForm = () => {
                       }}
                     />
                     <div className="text-destructive mt-1 h-[1px] text-sm">
-                      {errors.email && t("login.email_err")}
+                      {errors.username && t("login.email_err")}
                     </div>
                   </div>
                   <div>

@@ -1,4 +1,4 @@
-import { Loan } from "@/types/participation";
+import { Loan } from "@/types/login";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -52,17 +52,17 @@ const Loans = ({
               <div>გადასახადის თარიღი</div>
             </div>
           </div>
-          {loans?.map((l, i) => (
+          {loans?.map((l) => (
             <div
-              key={i}
+              key={`loan-${l.id}`}
               className="grid grid-cols-6 border-b items-center gap-6 py-4 px-6 hover:bg-gray-50 transition-all text-gray-600 cursor-pointer font-primaryMedium"
             >
-              <div className="text-gray-900">{l.title}</div>
-              <div>{l.amount} ₾</div>
-              <div>{l.duration}</div>
-              <div>{l.paid} ₾</div>
-              <div>{l.monthly}₾</div>
-              <div>{l.date}</div>
+              <div className="text-gray-900">{l.name}</div>
+              <div>{l.total_due} ₾</div>
+              <div>24</div>
+              <div>123 ₾</div>
+              <div>{l.monthly_payment}₾</div>
+              <div>{l.due_date}</div>
             </div>
           ))}
         </CardContent>

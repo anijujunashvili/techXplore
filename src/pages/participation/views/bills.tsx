@@ -1,4 +1,5 @@
-import { Bills, Request } from "@/types/participation";
+import { Request } from "@/types/participation";
+import { Utilities } from "@/types/login";
 import { useForm, Controller } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import {
@@ -34,7 +35,7 @@ const Loans = ({
   bills,
 }: {
   headline: string;
-  bills: Bills[] | undefined;
+  bills: Utilities[] | undefined;
 }) => {
   const defaultValues = { bills: 0, personal_number: 0 };
   const {
@@ -68,14 +69,14 @@ const Loans = ({
           </div>
           {bills?.map((b) => (
             <div
-              key={b.account_number}
+              key={`bill-${b.id}`}
               className="grid grid-cols-5 border-b gap-6 py-4 px-6 hover:bg-gray-50 transition-all text-gray-600 cursor-pointer font-primaryMedium"
             >
-              <div className="text-gray-900">{b.title}</div>
-              <div>{b.account_number}</div>
-              <div>{b.amount} ₾</div>
-              <div>{b.address}</div>
-              <div>{b.date}</div>
+              <div className="text-gray-900">{b.name}</div>
+              <div>1111111</div>
+              <div>{b.total_due} ₾</div>
+              <div>რამე მისამართი</div>
+              <div>{b.due_date}</div>
             </div>
           ))}
         </CardContent>

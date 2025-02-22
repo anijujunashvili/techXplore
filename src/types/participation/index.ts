@@ -1,18 +1,18 @@
 export type Loan = {
-  title: string;
-  amount: string;
-  duration: number;
-  paid: string;
-  date: string;
-  monthly: string;
+  name: string;
+  total_due: string;
+  due_date: string;
+  monthly_payment: string;
+  id: number;
 };
 
 export type Bills = {
-  title: string;
-  account_number: string;
-  amount: string;
-  address: string;
-  date: string;
+  name: string;
+  id: number;
+  // account_number: string;
+  total_due: number;
+  // address: string;
+  due_date: string;
 };
 
 export type Request = {
