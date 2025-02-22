@@ -43,7 +43,7 @@ const BillsRequests = (bills: BillsType) => {
       },
     });
   };
-  console.log("vamowmeb statuss", billsList);
+
   return (
     <div>
       <div className="w-4/5 mx-auto">

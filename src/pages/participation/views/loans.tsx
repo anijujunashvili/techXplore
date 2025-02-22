@@ -1,5 +1,5 @@
 import { Loan } from "@/types/login";
-
+import { LoanRequest } from "@/types/participation";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -27,7 +27,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
+import { useState } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { useSendUserRequests } from "@/react-query/mutation/requests";
 const Loans = ({
   headline,
   loans,
@@ -35,6 +38,37 @@ const Loans = ({
   headline: string;
   loans: Loan[] | undefined;
 }) => {
+  const defaultValues = { loan: 0, personal_number: 0, percentage: 0 };
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoanRequest>({
+    defaultValues: defaultValues,
+  });
+  const [loanType, setLoanType] = useState(0);
+  const handleStringToInt = (value: string) => {
+    setLoanType(parseInt(value));
+  };
+  const navigate = useNavigate();
+  const { mutate } = useSendUserRequests();
+  const onSubmit = () => {
+    const payload = {
+      loan: loanType,
+      receiver: [
+        {
+          personal_number: control._formValues.personal_number,
+          share_percentage: Number(control._formValues.percentage),
+        },
+      ],
+    };
+
+    mutate(payload, {
+      onSuccess: () => {
+        navigate("/en/requests");
+      },
+    });
+  };
   return (
     <>
       <Card className="w-full rounded-2xl px-4">
@@ -74,44 +108,76 @@ const Loans = ({
               </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
-              <DialogHeader>
-                <DialogTitle className="text-sm font-primaryRegular">
-                  სესხის თანამონაწილეობაზე მოთხოვნის გაგზავნა
-                </DialogTitle>
-              </DialogHeader>
-              <div className="flex flex-col gap-4 py-4">
-                <div>
-                  <Select>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="აირჩიეთ სესხი" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectItem value="apple">
-                          სამომხმარებლო სესხი
-                        </SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <DialogHeader>
+                  <DialogTitle className="text-sm font-primaryRegular">
+                    სესხის თანამონაწილეობაზე მოთხოვნის გაგზავნა
+                  </DialogTitle>
+                </DialogHeader>
+                <div className="flex flex-col gap-4 py-4">
+                  <div>
+                    <Select onValueChange={handleStringToInt}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="აირჩიეთ სესხი" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          {loans?.map((l) => (
+                            <SelectItem value={String(l.id)}>
+                              {l.name}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className=" items-center gap-4">
+                    <Controller
+                      control={control}
+                      name="personal_number"
+                      rules={{ required: true, minLength: 11, maxLength: 11 }}
+                      render={({ field: { onChange, value } }) => (
+                        <Input
+                          onChange={onChange}
+                          minLength={11}
+                          maxLength={11}
+                          value={value}
+                          placeholder="მომხმარებლის პირადი ნომერი"
+                          autoComplete="off"
+                        />
+                      )}
+                    />
+                    {errors.personal_number && (
+                      <span className="text-destructive text-xs">
+                        პირადი ნომერი უნდა შედგებოდეს 11 ციფრისგან
+                      </span>
+                    )}
+                  </div>
+                  <div className=" items-center gap-4">
+                    <Controller
+                      control={control}
+                      name="percentage"
+                      rules={{ required: true }}
+                      render={({ field: { onChange, value } }) => (
+                        <Input
+                          onChange={onChange}
+                          value={value}
+                          placeholder="გადასახადის %-ული მაჩვენებელი"
+                          autoComplete="off"
+                        />
+                      )}
+                    />
+                    {errors.percentage && (
+                      <span className="text-destructive text-xs">
+                        შეიყვანეთ პროცენტი
+                      </span>
+                    )}
+                  </div>
                 </div>
-                <div className=" items-center gap-4">
-                  <Input
-                    id="name"
-                    placeholder="მომხმარებლის პირადი ნომერი"
-                    className="col-span-3"
-                  />
-                </div>
-                <div className=" items-center gap-4">
-                  <Input
-                    id="name"
-                    placeholder="გადასახადის %-ული მაჩვენებელი"
-                    className="col-span-3"
-                  />
-                </div>
-              </div>
-              <DialogFooter>
-                <Button type="submit">გაგზავნა</Button>
-              </DialogFooter>
+                <DialogFooter>
+                  <Button type="submit">გაგზავნა</Button>
+                </DialogFooter>
+              </form>
             </DialogContent>
           </Dialog>
         </CardFooter>

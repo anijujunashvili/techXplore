@@ -1,3 +1,4 @@
+import { billsRequests, loanRequests } from "@/types/participation";
 import { httpClient } from "..";
 
 export const getUserRequests = async () => {
@@ -14,5 +15,12 @@ export const acceptUserRequests = async (id: number) => {
   const response = await httpClient.put(`api/user/invitations/${id}/`, {
     status: "accepted",
   });
+  return response.data;
+};
+
+export const sendUserRequests = async (
+  payload: loanRequests | billsRequests
+) => {
+  const response = await httpClient.post(`api/user/invitations/`, payload);
   return response.data;
 };

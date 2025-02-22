@@ -1,21 +1,21 @@
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import BillsRequests from "./bills";
 import LoansRequests from "./loans";
-// import { useEffect } from "react";
+import { useEffect } from "react";
 import { useGetUserRequests } from "@/react-query/query/requests";
 import { RequestType } from "@/types/participation";
 
 const RequestsPage = () => {
   const { data } = useGetUserRequests();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
-  // const ifAuth = localStorage.getItem("user");
+  const ifAuth = localStorage.getItem("user");
 
-  // useEffect(() => {
-  //   if (!ifAuth) {
-  //     navigate("/en/login");
-  //   }
-  // }, [ifAuth, navigate]);
+  useEffect(() => {
+    if (!ifAuth) {
+      navigate("/en/login");
+    }
+  }, [ifAuth, navigate]);
 
   const loans = data?.filter((l: RequestType) => {
     return l.loan_details !== null;

@@ -23,6 +23,11 @@ export type Request = {
   bills: number;
   personal_number: number;
 };
+export type LoanRequest = {
+  loan: number;
+  personal_number: number;
+  percentage: number;
+};
 
 export type LoanDetails = {
   monthly_payment: number;
@@ -48,4 +53,20 @@ export type RequestType = {
   utility_details: UtilityDetails;
   loan_details: LoanDetails;
   sender: Sender;
+};
+
+export type billsRequests = {
+  utility: number;
+  receiver: {
+    personal_number: string;
+    share_percentage: number;
+  }[];
+};
+
+export type loanRequests = {
+  loan: number;
+  receiver: {
+    personal_number: string;
+    share_percentage: number;
+  }[];
 };

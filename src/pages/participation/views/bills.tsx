@@ -29,6 +29,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useNavigate } from "react-router-dom";
+import { useSendUserRequests } from "@/react-query/mutation/requests";
+import { useState } from "react";
 
 const Loans = ({
   headline,
@@ -45,11 +47,29 @@ const Loans = ({
   } = useForm<Request>({
     defaultValues: defaultValues,
   });
-  const navigate = useNavigate();
+  const [billsType, setBillsType] = useState(0);
 
+  const handleStringToInt = (value: string) => {
+    setBillsType(parseInt(value));
+  };
+  const navigate = useNavigate();
+  const { mutate } = useSendUserRequests();
   const onSubmit = () => {
-    console.log(control._formValues);
-    navigate("/");
+    const payload = {
+      utility: billsType,
+      receiver: [
+        {
+          personal_number: control._formValues.personal_number,
+          share_percentage: 50,
+        },
+      ],
+    };
+
+    mutate(payload, {
+      onSuccess: () => {
+        navigate("/en/requests");
+      },
+    });
   };
   return (
     <>
@@ -98,22 +118,16 @@ const Loans = ({
                 </DialogHeader>
                 <div className="flex flex-col gap-4 py-4">
                   <div>
-                    <Controller
-                      render={() => (
-                        <Select>
-                          <SelectTrigger>
-                            <SelectValue placeholder="აირჩიეთ კომუნალური" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="1">თელასი</SelectItem>
-                            <SelectItem value="2">GWP</SelectItem>
-                            <SelectItem value="3">ენერგო პრო</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      )}
-                      control={control}
-                      name="bills"
-                    />
+                    <Select onValueChange={handleStringToInt}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="აირჩიეთ კომუნალური" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {bills?.map((b) => (
+                          <SelectItem value={String(b.id)}>{b.name}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                     {errors.bills && (
                       <span className="text-destructive text-xs">
                         აირჩიეთ კომუნალური

@@ -28,4 +28,5 @@ export type UserInfo = {
   balance: string;
   loans: Loan[];
   utilities: Utilities[];
+  avatar: string;
 };
