@@ -9,7 +9,7 @@ const RequestsPage = () => {
   const { data } = useGetUserRequests();
   const navigate = useNavigate();
 
-  const ifAuth = localStorage.getItem("user");
+  const ifAuth = localStorage.getItem("authUser");
 
   useEffect(() => {
     if (!ifAuth) {
@@ -17,7 +17,6 @@ const RequestsPage = () => {
     }
   }, [ifAuth, navigate]);
 
-  console.log("request type", data);
   const loans = data?.filter((l: RequestType) => {
     return l.loan_details !== null;
   });
