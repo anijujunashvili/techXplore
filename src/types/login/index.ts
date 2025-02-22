@@ -9,6 +9,10 @@ export type Loan = {
   due_date: string;
   total_due: number;
   monthly_payment: number;
+  amount_paid: string;
+  months_remaining: number;
+  total_months: number;
+  progress: number;
 };
 
 export type Utilities = {

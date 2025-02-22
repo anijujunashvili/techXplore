@@ -32,6 +32,9 @@ export type LoanRequest = {
 export type LoanDetails = {
   monthly_payment: number;
   name: string;
+  due_date: string;
+  months_remaining: number;
+  total_due: number;
 };
 
 export type Sender = {
@@ -44,6 +47,10 @@ export type Sender = {
 export type UtilityDetails = {
   total_due: number;
   name: string;
+  address: string;
+  due_date: string;
+  subscriber_number: string;
+  owner: string;
 };
 
 export type RequestType = {

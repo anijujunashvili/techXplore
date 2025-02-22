@@ -31,6 +31,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useSendUserRequests } from "@/react-query/mutation/requests";
 import { useState } from "react";
+import { Label } from "@/components/ui/label";
 
 const Loans = ({
   headline,
@@ -124,7 +125,12 @@ const Loans = ({
                       </SelectTrigger>
                       <SelectContent>
                         {bills?.map((b) => (
-                          <SelectItem value={String(b.id)}>{b.name}</SelectItem>
+                          <SelectItem
+                            key={`select${b.id}`}
+                            value={String(b.id)}
+                          >
+                            {b.name}
+                          </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
@@ -134,7 +140,8 @@ const Loans = ({
                       </span>
                     )}
                   </div>
-                  <div className=" items-center gap-4">
+                  <div className=" items-center gap-4 space-y-2">
+                    <Label>მომხმარებლის პირადი ნომერი</Label>
                     <Controller
                       control={control}
                       name="personal_number"
@@ -145,7 +152,6 @@ const Loans = ({
                           minLength={11}
                           maxLength={11}
                           value={value}
-                          placeholder="მომხმარებლის პირადი ნომერი"
                           autoComplete="off"
                         />
                       )}

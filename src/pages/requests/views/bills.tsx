@@ -68,9 +68,9 @@ const BillsRequests = (bills: BillsType) => {
                 className="grid grid-cols-5 border-b items-center gap-6 py-4 px-6 hover:bg-gray-50 transition-all text-gray-600 cursor-pointer font-primaryMedium"
               >
                 <div className="text-gray-900">{b.utility_details?.name}</div>
-                <div>12345634</div>
-                <div>20/11/2024</div>
-                <div>გიორგი ნუცუბიძე</div>
+                <div>{b.utility_details?.subscriber_number}</div>
+                <div>{b.utility_details?.due_date}</div>
+                <div>{b.utility_details?.owner}</div>
                 <div className="flex flex-row gap-4 justify-end">
                   {b.status === "pending" ? (
                     <>

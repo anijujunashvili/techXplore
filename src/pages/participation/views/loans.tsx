@@ -12,6 +12,7 @@ import {
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -31,6 +32,7 @@ import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useSendUserRequests } from "@/react-query/mutation/requests";
+import { Label } from "@/components/ui/label";
 const Loans = ({
   headline,
   loans,
@@ -69,6 +71,7 @@ const Loans = ({
       },
     });
   };
+
   return (
     <>
       <Card className="w-full rounded-2xl px-4">
@@ -92,10 +95,10 @@ const Loans = ({
               className="grid grid-cols-6 border-b items-center gap-6 py-4 px-6 hover:bg-gray-50 transition-all text-gray-600 cursor-pointer font-primaryMedium"
             >
               <div className="text-gray-900">{l.name}</div>
-              <div>{l.total_due} ₾</div>
-              <div>24</div>
-              <div>123 ₾</div>
-              <div>{l.monthly_payment}₾</div>
+              <div>{Math.floor(l.total_due)} ₾</div>
+              <div>{l.months_remaining}</div>
+              <div>{Math.floor(Number(l.amount_paid))} ₾</div>
+              <div>{Math.floor(l.monthly_payment)} ₾</div>
               <div>{l.due_date}</div>
             </div>
           ))}
@@ -113,6 +116,7 @@ const Loans = ({
                   <DialogTitle className="text-sm font-primaryRegular">
                     სესხის თანამონაწილეობაზე მოთხოვნის გაგზავნა
                   </DialogTitle>
+                  <DialogDescription></DialogDescription>
                 </DialogHeader>
                 <div className="flex flex-col gap-4 py-4">
                   <div>
@@ -123,7 +127,7 @@ const Loans = ({
                       <SelectContent>
                         <SelectGroup>
                           {loans?.map((l) => (
-                            <SelectItem value={String(l.id)}>
+                            <SelectItem key={`sel${l.id}`} value={String(l.id)}>
                               {l.name}
                             </SelectItem>
                           ))}
@@ -131,7 +135,8 @@ const Loans = ({
                       </SelectContent>
                     </Select>
                   </div>
-                  <div className=" items-center gap-4">
+                  <div className=" items-center space-y-2 gap-4">
+                    <Label>მომხმარებლის პირადი ნომერი</Label>
                     <Controller
                       control={control}
                       name="personal_number"
@@ -142,7 +147,6 @@ const Loans = ({
                           minLength={11}
                           maxLength={11}
                           value={value}
-                          placeholder="მომხმარებლის პირადი ნომერი"
                           autoComplete="off"
                         />
                       )}
@@ -153,7 +157,8 @@ const Loans = ({
                       </span>
                     )}
                   </div>
-                  <div className=" items-center gap-4">
+                  <div className=" items-center gap-4 space-y-2">
+                    <Label>გადასახადის %-ული მაჩვენებელი</Label>
                     <Controller
                       control={control}
                       name="percentage"
@@ -162,7 +167,6 @@ const Loans = ({
                         <Input
                           onChange={onChange}
                           value={value}
-                          placeholder="გადასახადის %-ული მაჩვენებელი"
                           autoComplete="off"
                         />
                       )}

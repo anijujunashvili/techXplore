@@ -6,9 +6,9 @@ import { useGetUserRequests } from "@/react-query/query/requests";
 import { RequestType } from "@/types/participation";
 
 const RequestsPage = () => {
-  const { data } = useGetUserRequests();
+  const { data, isError } = useGetUserRequests();
   const navigate = useNavigate();
-
+  console.log(isError);
   const ifAuth = localStorage.getItem("user");
 
   useEffect(() => {

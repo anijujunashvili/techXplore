@@ -43,6 +43,7 @@ const LoansRequests = (loans: LoansType) => {
       },
     });
   };
+
   return (
     <div>
       <div className="w-4/5 mx-auto">
@@ -72,10 +73,9 @@ const LoansRequests = (loans: LoansType) => {
                 <div className="text-gray-900 grid col-span-2">
                   {l.loan_details.name}
                 </div>
-                <div>{l.loan_details.monthly_payment} ₾</div>
-                {/* <div>123 ₾</div> */}
-                <div>24/11/2024</div>
-                <div>24</div>
+                <div>{l.loan_details.total_due} ₾</div>
+                <div>{l.loan_details.due_date}</div>
+                <div>{l.loan_details.months_remaining}</div>
                 <div>{l.sender.first_name + " " + l.sender.last_name}</div>
                 <div>{l.loan_details.monthly_payment} ₾</div>
                 <div>{Math.floor(l.share_percentage)} %</div>
