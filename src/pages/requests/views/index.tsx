@@ -6,9 +6,9 @@ import { useGetUserRequests } from "@/react-query/query/requests";
 import { RequestType } from "@/types/participation";
 
 const RequestsPage = () => {
-  const { data, isError } = useGetUserRequests();
+  const { data } = useGetUserRequests();
   const navigate = useNavigate();
-  console.log(isError);
+
   const ifAuth = localStorage.getItem("user");
 
   useEffect(() => {
@@ -17,6 +17,7 @@ const RequestsPage = () => {
     }
   }, [ifAuth, navigate]);
 
+  console.log("request type", data);
   const loans = data?.filter((l: RequestType) => {
     return l.loan_details !== null;
   });
