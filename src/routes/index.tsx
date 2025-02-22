@@ -16,8 +16,9 @@ const AppRoutes = () => {
             <Route path="*" element={<NotFoundPage />} key="not_found" />
           </Route>
           <Route element={<AuthLayout />}>{AUTH_ROUTES}</Route>
+          <Route path="*" element={<Navigate to={`/${DefaultLang}/login`} />} />
         </Route>
-        <Route path="*" element={<Navigate to={`/${DefaultLang}`} />} />
+        <Route path="*" element={<Navigate to={`/${DefaultLang}/login`} />} />
       </Routes>
     </BrowserRouter>
   );
