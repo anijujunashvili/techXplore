@@ -67,7 +67,9 @@ const LoginForm = () => {
                       }}
                     />
                     <div className="text-destructive mt-1 h-[1px] text-sm">
-                      {errors.username && t("login.email_err")}
+                      {errors.username && (
+                        <span>გთხოვთ შეიყვანოთ მომხმარებლის სახელი</span>
+                      )}
                     </div>
                   </div>
                   <div>
