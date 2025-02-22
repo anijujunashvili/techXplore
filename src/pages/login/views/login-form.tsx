@@ -78,6 +78,7 @@ const LoginForm = () => {
                         return (
                           <Input
                             onChange={onChange}
+                            type="password"
                             value={value}
                             placeholder={t("login.password")}
                             className="bg-[#eef1f1] h-[60px] font-primaryMedium focus-visible:ring-0 focus-visible:ring-offset-1"

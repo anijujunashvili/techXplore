@@ -73,9 +73,9 @@ const Loans = ({
               className="grid grid-cols-5 border-b gap-6 py-4 px-6 hover:bg-gray-50 transition-all text-gray-600 cursor-pointer font-primaryMedium"
             >
               <div className="text-gray-900">{b.name}</div>
-              <div>1111111</div>
+              <div>{b.subscriber_number}</div>
               <div>{b.total_due} ₾</div>
-              <div>რამე მისამართი</div>
+              <div>{b.address}</div>
               <div>{b.due_date}</div>
             </div>
           ))}

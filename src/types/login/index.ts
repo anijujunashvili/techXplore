@@ -12,10 +12,12 @@ export type Loan = {
 };
 
 export type Utilities = {
-  id: number;
   name: string;
+  id: number;
+  subscriber_number: string;
+  address: string;
   total_due: number;
-  due_date: number;
+  due_date: string;
 };
 
 export type UserInfo = {

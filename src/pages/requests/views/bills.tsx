@@ -5,9 +5,45 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Check, X } from "lucide-react";
+import { Check, Trash2, X } from "lucide-react";
+import { RequestType } from "@/types/participation";
+import {
+  useAcceptUserRequests,
+  useDeleteUserRequests,
+} from "@/react-query/mutation/requests";
+import { useQueryClient } from "@tanstack/react-query";
+import { QUERY_KEYS } from "@/react-query/query/enum";
 
-const BillsRequests = () => {
+type BillsType = {
+  bills: RequestType[] | undefined;
+};
+
+const BillsRequests = (bills: BillsType) => {
+  const billsList = bills?.bills;
+  const queryClient = useQueryClient();
+  const { mutate: reject } = useDeleteUserRequests();
+  const { mutate: accept } = useAcceptUserRequests();
+
+  const handleReject = (id: number) => {
+    reject(id, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.GET_REQUESTS],
+        });
+      },
+    });
+  };
+
+  const handleAccept = (id: number) => {
+    accept(id, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.GET_REQUESTS],
+        });
+      },
+    });
+  };
+  console.log("vamowmeb statuss", billsList);
   return (
     <div>
       <div className="w-4/5 mx-auto">
@@ -26,21 +62,42 @@ const BillsRequests = () => {
                 <div></div>
               </div>
             </div>
-
-            <div className="grid grid-cols-5 border-b items-center gap-6 py-4 px-6 hover:bg-gray-50 transition-all text-gray-600 cursor-pointer font-primaryMedium">
-              <div className="text-gray-900">ენერგო პრო</div>
-              <div>12345634</div>
-              <div>20/11/2024</div>
-              <div>გიორგი ნუცუბიძე</div>
-              <div className="flex flex-row gap-4 justify-end">
-                <div title="თანხმობა">
-                  <Check className="text-green-700" />
-                </div>
-                <div title="უარი">
-                  <X className="text-red-700" />
+            {billsList?.map((b: RequestType) => (
+              <div
+                key={`bil${b.id}`}
+                className="grid grid-cols-5 border-b items-center gap-6 py-4 px-6 hover:bg-gray-50 transition-all text-gray-600 cursor-pointer font-primaryMedium"
+              >
+                <div className="text-gray-900">{b.utility_details?.name}</div>
+                <div>12345634</div>
+                <div>20/11/2024</div>
+                <div>გიორგი ნუცუბიძე</div>
+                <div className="flex flex-row gap-4 justify-end">
+                  {b.status === "pending" ? (
+                    <>
+                      <div title="თანხმობა">
+                        <Check
+                          className="text-green-700"
+                          onClick={() => handleAccept(b.id)}
+                        />
+                      </div>
+                      <div title="უარი">
+                        <X
+                          className="text-red-700"
+                          onClick={() => handleReject(b.id)}
+                        />
+                      </div>
+                    </>
+                  ) : (
+                    <div title="უარი">
+                      <Trash2
+                        className="text-red-700"
+                        onClick={() => handleReject(b.id)}
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
-            </div>
+            ))}
           </CardContent>
           <CardFooter className="flex justify-end px-0"></CardFooter>
         </Card>

@@ -46,7 +46,7 @@ const Loans = ({
             <div className="grid grid-cols-6 border-b gap-6 py-2 px-6  text-gray-800 text-sm cursor-pointer font-primaryMedium">
               <div>დასახელება</div>
               <div>თანხა</div>
-              <div>ხანგრძლივობა</div>
+              <div>თვეების რაოდენობა</div>
               <div>გადახდილი თანხა</div>
               <div>ყოველთვიური გადასახადი</div>
               <div>გადასახადის თარიღი</div>
